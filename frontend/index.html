@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Health Calculator</title>
+    <!-- Tailwind CSS CDN for basic layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom Pixel Art Styling */
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        body {
+            font-family: 'Press Start 2P', cursive; /* Pixel art font */
+            /* Updated background for pixel art clouds */
+            background-color: #87CEEB; /* Base sky blue */
+            background-image:
+                radial-gradient(circle at 25% 25%, rgba(255,255,255,0.7) 5%, transparent 10%),
+                radial-gradient(circle at 75% 15%, rgba(255,255,255,0.6) 8%, transparent 12%),
+                radial-gradient(circle at 50% 80%, rgba(255,255,255,0.5) 7%, transparent 11%),
+                radial-gradient(circle at 10% 60%, rgba(255,255,255,0.4) 6%, transparent 10%),
+                radial-gradient(circle at 90% 70%, rgba(255,255,255,0.3) 9%, transparent 13%);
+            background-size: 200px 200px, 250px 250px, 180px 180px, 220px 220px, 280px 280px; /* Adjust size for pixel effect */
+            background-repeat: repeat;
+            animation: moveClouds 60s linear infinite alternate; /* Optional: animate clouds */
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            color: #333;
+            text-shadow: 1px 1px 0 #fff;
+        }
+
+        @keyframes moveClouds {
+            from { background-position: 0 0, 50px 20px, 100px 40px, 150px 60px, 200px 80px; }
+            to { background-position: 200px 100px, 250px 120px, 280px 140px, 300px 160px, 350px 180px; }
+        }
+
+        .pixel-container {
+            background-color: #A9A9A9; /* Darker grey for container */
+            border: 4px solid #4B0082; /* Indigo border for pixel effect */
+            border-radius: 12px; /* Rounded corners */
+            padding: 30px;
+            box-shadow: 8px 8px 0px 0px rgba(0,0,0,0.75); /* Pixelated shadow */
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            color: #8B0000; /* Dark red for title */
+            margin-bottom: 25px;
+            text-shadow: 2px 2px 0 #FFD700; /* Gold shadow */
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: #4B0082; /* Indigo for labels */
+        }
+
+        .pixel-input, .pixel-select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #4B0082; /* Indigo border */
+            background-color: #F0F8FF; /* AliceBlue background */
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.8rem;
+            color: #333;
+            border-radius: 5px;
+            box-shadow: 2px 2px 0px 0px rgba(0,0,0,0.5);
+            -webkit-appearance: none; /* Remove default select arrow */
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        .pixel-input:focus, .pixel-select:focus {
+            outline: none;
+            border-color: #FF4500; /* OrangeRed on focus */
+            box-shadow: 3px 3px 0px 0px rgba(0,0,0,0.7);
+        }
+
+        .pixel-button {
+            background-color: #32CD32; /* LimeGreen */
+            color: white;
+            padding: 12px 25px;
+            border: 3px solid #006400; /* DarkGreen border */
+            border-radius: 8px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.75);
+            transition: all 0.1s ease-in-out;
+            margin-top: 20px;
+        }
+
+        .pixel-button:hover {
+            background-color: #008000; /* Green */
+            box-shadow: 2px 2px 0px 0px rgba(0,0,0,0.75);
+            transform: translate(2px, 2px);
+        }
+
+        .pixel-button:active {
+            background-color: #006400; /* DarkGreen */
+            box-shadow: 0px 0px 0px 0px rgba(0,0,0,0.75);
+            transform: translate(4px, 4px);
+        }
+
+        .result-box {
+            background-color: #ADD8E6; /* LightBlue */
+            border: 3px solid #4169E1; /* RoyalBlue border */
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 25px;
+            text-align: center;
+            box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.75);
+            font-size: 1rem;
+            color: #191970; /* MidnightBlue */
+            min-height: 80px; /* Ensure some height even if empty */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .result-box p {
+            margin: 5px 0;
+        }
+
+        .error-message {
+            color: #FF4500; /* OrangeRed for errors */
+            font-size: 0.8rem;
+            margin-top: 10px;
+            text-shadow: none;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .pixel-container {
+                padding: 20px;
+                margin: 10px;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+            .pixel-input, .pixel-select, .pixel-button, .result-box {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="pixel-container">
+        <h1>Pixel Health Calculator</h1>
+
+        <div class="input-group">
+            <label for="gender">Gender:</label>
+            <select id="gender" class="pixel-select">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label for="weight">Weight (kg):</label>
+            <input type="number" id="weight" class="pixel-input" placeholder="e.g., 70" step="0.1" min="1">
+        </div>
+
+        <div class="input-group">
+            <label for="height">Height (cm):</label>
+            <input type="number" id="height" class="pixel-input" placeholder="e.g., 175" step="0.1" min="1">
+        </div>
+
+        <div class="input-group">
+            <label for="age">Age (years):</label>
+            <input type="number" id="age" class="pixel-input" placeholder="e.g., 30" min="1">
+        </div>
+
+        <div class="input-group">
+            <label for="activityLevel">Activity Level:</label>
+            <select id="activityLevel" class="pixel-select">
+                <option value="sedentary">Sedentary (little or no exercise)</option>
+                <option value="lightlyActive">Lightly Active (light exercise/sports 1-3 days/week)</option>
+                <option value="moderatelyActive">Moderately Active (moderate exercise/sports 3-5 days/week)</option>
+                <option value="veryActive">Very Active (hard exercise/sports 6-7 days/week)</option>
+                <option value="superActive">Super Active (very hard exercise/physical job)</option>
+            </select>
+        </div>
+
+        <button class="pixel-button" onclick="calculate()">Calculate</button>
+
+        <div id="result" class="result-box">
+            <p>Enter your details and click 'Calculate'.</p>
+        </div>
+        <p id="error" class="error-message"></p>
+    </div>
+
+    <script>
+        /**
+         * Calculates BMI (Body Mass Index) and BMR (Basal Metabolic Rate).
+         * Displays the results in the result box, or an error message if inputs are invalid.
+         */
+        function calculate() {
+            // Get input values
+            const gender = document.getElementById('gender').value;
+            const weight = parseFloat(document.getElementById('weight').value); // kg
+            const height = parseFloat(document.getElementById('height').value); // cm
+            const age = parseInt(document.getElementById('age').value);
+            const activityLevel = document.getElementById('activityLevel').value;
+
+            const resultDiv = document.getElementById('result');
+            const errorDiv = document.getElementById('error');
+
+            // Clear previous results and errors
+            resultDiv.innerHTML = '';
+            errorDiv.textContent = '';
+
+            // Input validation
+            if (isNaN(weight) || isNaN(height) || isNaN(age) || weight <= 0 || height <= 0 || age <= 0) {
+                errorDiv.textContent = 'Please enter valid positive numbers for weight, height, and age.';
+                resultDiv.innerHTML = '<p>Invalid input.</p>';
+                return;
+            }
+
+            // --- BMI Calculation ---
+            // Convert height from cm to meters for BMI calculation (BMI = weight (kg) / (height (m))^2)
+            const heightInMeters = height / 100;
+            const bmi = weight / (heightInMeters * heightInMeters);
+
+            let bmiCategory = '';
+            if (bmi < 18.5) {
+                bmiCategory = 'Underweight';
+            } else if (bmi >= 18.5 && bmi < 24.9) {
+                bmiCategory = 'Normal weight';
+            } else if (bmi >= 25 && bmi < 29.9) {
+                bmiCategory = 'Overweight';
+            } else {
+                bmiCategory = 'Obesity';
+            }
+
+            // --- BMR Calculation (Mifflin-St Jeor Equation) ---
+            let bmr;
+            if (gender === 'male') {
+                bmr = (10 * weight) + (6.25 * height) - (5 * age) + 5;
+            } else { // female
+                bmr = (10 * weight) + (6.25 * height) - (5 * age) - 161;
+            }
+
+            // --- TDEE (Total Daily Energy Expenditure) Calculation ---
+            let activityFactor;
+            switch (activityLevel) {
+                case 'sedentary':
+                    activityFactor = 1.2;
+                    break;
+                case 'lightlyActive':
+                    activityFactor = 1.375;
+                    break;
+                case 'moderatelyActive':
+                    activityFactor = 1.55;
+                    break;
+                case 'veryActive':
+                    activityFactor = 1.725;
+                    break;
+                case 'superActive':
+                    activityFactor = 1.9;
+                    break;
+                default:
+                    activityFactor = 1.2; // Default to sedentary
+            }
+
+            const tdee = bmr * activityFactor;
+
+            // Display results
+            resultDiv.innerHTML = `
+                <p><strong>BMI:</strong> ${bmi.toFixed(2)} (${bmiCategory})</p>
+                <p><strong>BMR:</strong> ${bmr.toFixed(0)} calories/day</p>
+                <p><strong>TDEE:</strong> ${tdee.toFixed(0)} calories/day</p>
+            `;
+        }
+    </script>
+</body>
+</html>
