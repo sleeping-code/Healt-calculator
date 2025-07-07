@@ -1,32 +1,23 @@
-# docker-compose.yml
-version: '3.8' # Specify the Docker Compose file format version
+
+version: '3.8' 
 
 services:
-  # Frontend service definition
-  frontend:
-    build: ./frontend # Build the image from the Dockerfile in the 'frontend' directory
-    ports:
-      - "80:80" # Map port 80 on the host to port 80 in the container
-    volumes:
-      # Mount the current frontend directory into the container.
-      # This is useful for development as changes to frontend files
-      # will be reflected without rebuilding the image.
-      - ./frontend:/usr/share/nginx/html
-    container_name: pixel-health-frontend # Assign a custom name to the container
 
-  # Backend service definition
-  backend:
-    build: ./backend # Build the image from the Dockerfile in the 'backend' directory
+  frontend:
+    build: ./frontend
     ports:
-      - "5000:5000" # Map port 5000 on the host to port 5000 in the container
+      - "80:80" 
     volumes:
-      # Mount the current backend directory into the container.
-      # Useful for development, as changes to Python files will
-      # trigger Flask's reloader (if debug mode is on).
+      - ./frontend:/usr/share/nginx/html
+    container_name: pixel-health-frontend
+
+  backend:
+    build: ./backend 
+    ports:
+      - "5000:5000" 
+    volumes:
+
       - ./backend:/app
-    container_name: pixel-health-backend # Assign a custom name to the container
-    # Depends on the frontend, meaning backend will start after frontend is up.
-    # This is more for order of startup, not strict dependency.
-    # For a real application, you might use health checks.
+    container_name: pixel-health-backend 
     depends_on:
       - frontend

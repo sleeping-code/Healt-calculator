@@ -1,9 +1,8 @@
-# app.py
 from flask import Flask, request, jsonify
-from flask_cors import CORS # Required for cross-origin requests from frontend
+from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app) # Enable CORS for all routes
+CORS(app)
 
 @app.route('/')
 def home():
@@ -21,21 +20,18 @@ def calculate_health():
     """
     data = request.get_json()
 
-    # Extract data with default values or error handling
     gender = data.get('gender')
-    weight = data.get('weight') # kg
-    height = data.get('height') # cm
+    weight = data.get('weight')
+    height = data.get('height')
     age = data.get('age')
     activity_level = data.get('activityLevel')
 
-    # Basic input validation
     if not all([gender, weight, height, age, activity_level]) or \
        not isinstance(weight, (int, float)) or weight <= 0 or \
        not isinstance(height, (int, float)) or height <= 0 or \
        not isinstance(age, int) or age <= 0:
         return jsonify({"error": "Invalid input. Please provide valid gender, positive weight, height, and age."}), 400
 
-    # --- BMI Calculation ---
     height_in_meters = height / 100
     bmi = weight / (height_in_meters * height_in_meters)
 
@@ -49,7 +45,6 @@ def calculate_health():
     else:
         bmi_category = 'Obesity'
 
-    # --- BMR Calculation (Mifflin-St Jeor Equation) ---
     bmr = 0
     if gender == 'male':
         bmr = (10 * weight) + (6.25 * height) - (5 * age) + 5
@@ -58,8 +53,7 @@ def calculate_health():
     else:
         return jsonify({"error": "Invalid gender. Must be 'male' or 'female'."}), 400
 
-    # --- TDEE (Total Daily Energy Expenditure) Calculation ---
-    activity_factor = 1.2 # Default to sedentary
+    activity_factor = 1.2
     if activity_level == 'lightlyActive':
         activity_factor = 1.375
     elif activity_level == 'moderatelyActive':
@@ -79,5 +73,4 @@ def calculate_health():
     })
 
 if __name__ == '__main__':
-    # Run the Flask app on all available interfaces and port 5000
     app.run(host='0.0.0.0', port=5000)
